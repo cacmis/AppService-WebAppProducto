@@ -1,0 +1,78 @@
+@using WebAppProducto.ViewModels
+@model ProductoViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    string message = ViewBag.Message;
+}
+
+<h1>Products</h1>
+
+<p>
+    <a asp-action="Create">Create new product</a>
+</p>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>@message</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+}
+
+<div class="row">
+    <form asp-action="Index" asp-controller="Product" method="get">
+        <p>
+
+            Name: <input type="text" asp-for="SearchText" placeholder="Search product" />
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+               
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                   
+                    <td>
+                        <a class="btn btn-primary" asp-action="Edit" onclick="showConfirmAcctionEdit(event,@item.Id)"
+                            asp-route-id="@item.Id">
+                            <i class="fas fa-edit"></i> Edit
+                        </a> |
+                        <a class="btn btn-success fas fa-info-circle" asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fas fa-info-circle"></i> Details
+                        </a> |
+                        <a class="btn btn-danger" asp-action="Delete" onclick="showConfirmAcctionDelete(event,@item.Id)"
+                            asp-route-id="@item.Id">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script src="~/js/product.js"></script>
+}
